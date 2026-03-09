@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marcus Fenix — La Historia Completa | Gears of War 3</title>
+
+  <!-- Ionic -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+  <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --gow-red:        #c0392b;
+      --gow-red-dark:   #7b1a10;
+      --gow-red-glow:   rgba(192, 57, 43, 0.55);
+      --gow-gold:       #c9a227;
+      --gow-gold-dim:   rgba(201, 162, 39, 0.25);
+      --gow-dark:       #0d0b0b;
+      --gow-card:       rgba(18, 12, 12, 0.88);
+      --gow-card-border:rgba(160, 40, 20, 0.45);
+      --gow-gray:       #2a2220;
+      --gow-text:       #d4c4b8;
+      --gow-text-dim:   #8a7a70;
+      --gow-white:      #f0e8e0;
+    }
+
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    ion-app, ion-content {
+      --background: transparent;
+      --ion-background-color: transparent;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background-color: var(--gow-dark);
+      color: var(--gow-text);
+      min-height: 100vh;
+    }
+
+    /* ── CINEMATIC BACKGROUND ── */
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bg-layer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%,   rgba(139, 20, 10, 0.35) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 50% at 10% 80%,  rgba(80, 10, 5, 0.4) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 90% 60%,  rgba(100, 15, 5, 0.3) 0%, transparent 55%),
+        linear-gradient(180deg, #0d0b0b 0%, #140e0d 40%, #0a0808 100%);
+      z-index: 1;
+    }
+
+    /* Noise grain overlay */
+    .bg-layer::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+      opacity: 0.45;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* COG skull watermark */
+    .cog-watermark {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: clamp(300px, 60vw, 700px);
+      color: rgba(192, 57, 43, 0.04);
+      line-height: 1;
+      z-index: 0;
+      pointer-events: none;
+      user-select: none;
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: -0.05em;
+    }
+
+    /* ── SCROLL CONTAINER ── */
+    .page-scroll {
+      position: relative;
+      z-index: 10;
+      padding: 0 0 80px;
+    }
+
+    /* ── HERO HEADER ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 20px;
+      overflow: hidden;
+    }
+
+    .hero-bg-bars {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 48px,
+        rgba(192, 57, 43, 0.03) 48px,
+        rgba(192, 57, 43, 0.03) 50px
+      );
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.35em;
+      color: var(--gow-gold);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 12vw, 9rem);
+      line-height: 0.9;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--gow-white);
+      text-shadow:
+        0 0 60px rgba(192, 57, 43, 0.7),
+        0 4px 30px rgba(0,0,0,0.9),
+        0 2px 0 var(--gow-red-dark);
+      opacity: 0;
+      animation: fadeUp 1s ease 0.4s forwards;
+      margin-bottom: 6px;
+    }
+
+    .hero-title span {
+      color: var(--gow-red);
+      display: block;
+    }
+
+    .hero-sub {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      letter-spacing: 0.25em;
+      color: var(--gow-text-dim);
+      text-transform: uppercase;
+      margin-top: 18px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.6s forwards;
+    }
+
+    .hero-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 36px auto;
+      width: min(500px, 80vw);
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.8s forwards;
+    }
+
+    .hero-divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gow-red), transparent);
+    }
+
+    .cog-icon {
+      width: 36px;
+      height: 36px;
+      fill: var(--gow-red);
+      filter: drop-shadow(0 0 8px var(--gow-red-glow));
+    }
+
+    .hero-desc {
+      max-width: 680px;
+      font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+      line-height: 1.75;
+      color: var(--gow-text);
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1s forwards;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1.4s forwards;
+    }
+
+    .scroll-hint span {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: var(--gow-text-dim);
+      text-transform: uppercase;
+    }
+
+    .scroll-chevron {
+      width: 24px;
+      height: 24px;
+      border-right: 2px solid var(--gow-red);
+      border-bottom: 2px solid var(--gow-red);
+      transform: rotate(45deg);
+      animation: bounceDown 1.5s ease infinite;
+    }
+
+    /* ── TIMELINE TRACK ── */
+    .timeline-section {
+      position: relative;
+      padding: 60px 0;
+    }
+
+    .timeline-section::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, transparent, var(--gow-red) 10%, var(--gow-red) 90%, transparent);
+      transform: translateX(-50%);
+      opacity: 0.4;
+    }
+
+    /* ── SECTION CHAPTER TITLE ── */
+    .chapter-title {
+      text-align: center;
+      padding: 60px 20px 30px;
+      position: relative;
+    }
+
+    .chapter-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 15vw, 12rem);
+      color: rgba(192, 57, 43, 0.08);
+      line-height: 1;
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      letter-spacing: -0.05em;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .chapter-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.4em;
+      color: var(--gow-gold);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .chapter-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gow-white);
+      text-shadow: 0 2px 20px rgba(192,57,43,0.5);
+      position: relative;
+    }
+
+    /* ── CARDS CONTAINER ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr));
+      gap: 32px;
+      padding: 20px clamp(16px, 5vw, 80px) 40px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .cards-grid.single {
+      grid-template-columns: 1fr;
+      max-width: 820px;
+    }
+
+    /* ── THE CARD ── */
+    .gow-card {
+      background: var(--gow-card);
+      border: 1px solid var(--gow-card-border);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+      box-shadow:
+        0 8px 40px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+
+      /* entry animation */
+      opacity: 0;
+      animation: cardReveal 0.7s ease forwards;
+    }
+
+    .gow-card:hover {
+      transform: translateY(-6px);
+      box-shadow:
+        0 20px 60px rgba(0,0,0,0.75),
+        0 0 40px rgba(192, 57, 43, 0.2),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+
+    /* Red accent bar top */
+    .gow-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gow-red-dark), var(--gow-red), var(--gow-gold), var(--gow-red));
+      z-index: 5;
+    }
+
+    /* Scratched texture lines */
+    .gow-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -55deg,
+        transparent,
+        transparent 30px,
+        rgba(255,255,255,0.005) 30px,
+        rgba(255,255,255,0.005) 31px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── CARD IMAGE SLOT ── */
+    .card-image-slot {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/7;
+      background: #0a0808;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(160, 40, 20, 0.3);
+    }
+
+    .card-image-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+      transition: opacity 0.4s, transform 0.5s;
+    }
+
+    .gow-card:hover .card-image-slot img {
+      opacity: 1;
+      transform: scale(1.04);
+    }
+
+    .image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #100c0c 0%, #1a1010 50%, #0d0a0a 100%);
+      gap: 12px;
+    }
+
+    .image-placeholder .ph-icon {
+      width: 52px; height: 52px;
+      opacity: 0.25;
+    }
+
+    .image-placeholder span {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      color: var(--gow-text-dim);
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    .card-image-year {
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      color: var(--gow-red);
+      text-shadow: 0 0 16px rgba(192,57,43,0.8);
+      letter-spacing: 0.1em;
+      z-index: 3;
+    }
+
+    /* ── CARD BODY ── */
+    .card-body {
+      padding: 26px 28px 30px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .card-tag {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.35em;
+      color: var(--gow-gold);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-tag::before {
+      content: '';
+      display: inline-block;
+      width: 18px;
+      height: 1px;
+      background: var(--gow-gold);
+      opacity: 0.7;
+    }
+
+    .card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      letter-spacing: 0.06em;
+      line-height: 1.05;
+      color: var(--gow-white);
+      text-transform: uppercase;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.8);
+      margin-bottom: 16px;
+    }
+
+    /* ── SEPARATOR ── */
+    .card-sep {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 16px 0 18px;
+    }
+
+    .card-sep-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gow-red), rgba(192,57,43,0.1));
+    }
+
+    .card-sep-diamond {
+      width: 7px; height: 7px;
+      background: var(--gow-red);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+      box-shadow: 0 0 8px var(--gow-red-glow);
+    }
+
+    .card-sep-line-r {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(192,57,43,0.1), var(--gow-red));
+    }
+
+    /* ── CARD SUBTITLE ── */
+    .card-subtitle {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--gow-red);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    /* ── CARD TEXT ── */
+    .card-text {
+      font-size: 0.93rem;
+      line-height: 1.8;
+      color: var(--gow-text);
+      font-weight: 300;
+    }
+
+    .card-text p + p { margin-top: 12px; }
+
+    .card-text strong {
+      color: var(--gow-white);
+      font-weight: 500;
+    }
+
+    /* ── INLINE VIDEO SLOT ── */
+    .video-slot {
+      margin: 20px 0;
+      border-radius: 3px;
+      overflow: hidden;
+      border: 1px solid rgba(160,40,20,0.3);
+      background: #050303;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .video-slot iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .video-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      height: 100%;
+      min-height: 200px;
+      background: linear-gradient(135deg, #0a0606, #140c0c);
+      cursor: pointer;
+    }
+
+    .video-placeholder .play-btn {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      border: 2px solid var(--gow-red);
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(192,57,43,0.15);
+      transition: background 0.2s;
+    }
+
+    .video-placeholder:hover .play-btn {
+      background: rgba(192,57,43,0.4);
+    }
+
+    .video-placeholder .play-btn svg { fill: var(--gow-white); width: 22px; height: 22px; margin-left: 4px; }
+
+    .video-placeholder span {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      color: var(--gow-text-dim);
+      text-transform: uppercase;
+    }
+
+    /* ── INLINE IMAGE SLOT (inside card text area) ── */
+    .inline-img-slot {
+      margin: 18px 0;
+      border-radius: 3px;
+      overflow: hidden;
+      border: 1px solid rgba(160,40,20,0.3);
+      background: #0a0606;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .inline-img-slot .image-placeholder {
+      min-height: 160px;
+    }
+
+    /* ── QUOTE BLOCK ── */
+    .card-quote {
+      margin: 18px 0;
+      padding: 16px 20px 16px 24px;
+      border-left: 3px solid var(--gow-red);
+      background: rgba(192,57,43,0.06);
+      border-radius: 0 3px 3px 0;
+    }
+
+    .card-quote p {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      line-height: 1.6;
+      color: var(--gow-white);
+      letter-spacing: 0.02em;
+    }
+
+    .card-quote cite {
+      display: block;
+      margin-top: 8px;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      color: var(--gow-text-dim);
+      text-transform: uppercase;
+      font-style: normal;
+    }
+
+    /* ── STAT TAGS ── */
+    .card-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(160,40,20,0.2);
+    }
+
+    .stat-chip {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gow-text-dim);
+      background: rgba(192,57,43,0.1);
+      border: 1px solid rgba(192,57,43,0.25);
+      padding: 4px 12px;
+      border-radius: 2px;
+    }
+
+    /* ── FOOTER ── */
+    .gow-footer {
+      text-align: center;
+      padding: 60px 20px 40px;
+      position: relative;
+    }
+
+    .footer-cog {
+      display: inline-block;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 6vw, 4rem);
+      color: rgba(192,57,43,0.15);
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+    }
+
+    .footer-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      color: var(--gow-text-dim);
+      text-transform: uppercase;
+    }
+
+    .footer-line {
+      width: 120px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gow-red), transparent);
+      margin: 20px auto 16px;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes cardReveal {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounceDown {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50%       { transform: rotate(45deg) translateY(6px); }
+    }
+
+    /* stagger cards */
+    .gow-card:nth-child(1) { animation-delay: 0.1s; }
+    .gow-card:nth-child(2) { animation-delay: 0.25s; }
+    .gow-card:nth-child(3) { animation-delay: 0.4s; }
+    .gow-card:nth-child(4) { animation-delay: 0.55s; }
+
+    /* ── CHAPTER DIVIDER ── */
+    .ch-divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 0 clamp(16px, 5vw, 80px);
+      margin: 50px auto 10px;
+      max-width: 1300px;
+    }
+
+    .ch-divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(192,57,43,0.4), transparent);
+    }
+
+    .ch-divider-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      color: rgba(192,57,43,0.5);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .timeline-section::before { display: none; }
+      .cards-grid { padding: 10px 14px 30px; gap: 24px; }
+      .card-body { padding: 20px 18px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="cog-watermark">COG</div>
+
+<ion-app>
+  <ion-content scroll-y="true">
+    <div class="page-scroll">
+
+      <!-- ════════════════════════ HERO ════════════════════════ -->
+      <section class="hero">
+        <div class="hero-bg-bars"></div>
+
+        <p class="hero-eyebrow">Coalition of Ordered Governments — Archivo Clasificado</p>
+
+        <h1 class="hero-title">
+          Marcus<span>Fenix</span>
+        </h1>
+
+        <p class="hero-sub">Sargento Mayor · 26ª Compañía de Infantería · Delta Squad</p>
+
+        <div class="hero-divider">
+          <div class="hero-divider-line"></div>
+          <svg class="cog-icon" viewBox="0 0 100 100">
+            <path d="M50 20 L55 30 L65 25 L63 36 L74 37 L67 45 L74 53 L63 54 L65 65 L55 60 L50 70 L45 60 L35 65 L37 54 L26 53 L33 45 L26 37 L37 36 L35 25 L45 30 Z" />
+            <circle cx="50" cy="47" r="12" fill="none" stroke-width="3"/>
+          </svg>
+          <div class="hero-divider-line"></div>
+        </div>
+
+        <p class="hero-desc">
+          La vida de Marcus Fenix es una épica de guerra, sacrificio y redención que abarca décadas de
+          conflicto implacable. Desde los campos de fútbol de la Academia Osborn hasta las entrañas del
+          planeta Sera, esta es la historia completa del hombre que se convirtió en la última esperanza
+          de la humanidad.
+        </p>
+
+        <div class="scroll-hint">
+          <span>Desplazar</span>
+          <div class="scroll-chevron"></div>
+        </div>
+      </section>
+
+
+      <!-- ════════ CAPÍTULO I: ORÍGENES ════════ -->
+      <section class="timeline-section">
+        <div class="chapter-title">
+          <div class="chapter-number">I</div>
+          <p class="chapter-label">Capítulo I · Antes de la Guerra</p>
+          <h2 class="chapter-heading">Los Orígenes del Héroe</h2>
+        </div>
+
+        <div class="cards-grid">
+
+          <!-- CARD 1 -->
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Nacimiento de Marcus Fenix</span>
+              </div>
+              <div class="card-image-year">8 A.E.</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Año 8 Antes de la Emergencia</p>
+              <h3 class="card-title">El Nacimiento de una Leyenda</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">Sera — Jacinto, Familia Fenix</p>
+              <div class="card-text">
+                <p><strong>Marcus Michael Fenix</strong> nació en Jacinto, la ciudad-fortaleza construida sobre el único basamento de granito inasequible a las criaturas del subsuelo. Hijo del brillante científico militar <strong>Adam Fenix</strong> y de <strong>Elain Fenix</strong>, creció rodeado de lujo relativo, pero también de una frialdad paternal que marcaría su psicología para siempre.</p>
+                <p>Adam Fenix era un genio reconocido por la <strong>Coalition of Ordered Governments (COG)</strong>, dedicado en cuerpo y alma a sus investigaciones. La ausencia emocional del padre sembró en Marcus una combinación de admiración y resentimiento que persistiría décadas.</p>
+              </div>
+              <div class="card-stats">
+                <span class="stat-chip">Jacinto</span>
+                <span class="stat-chip">Familia Fenix</span>
+                <span class="stat-chip">Antes de la Emergencia</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 2 -->
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Academia Osborn</span>
+              </div>
+              <div class="card-image-year">Academia</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Infancia y Adolescencia</p>
+              <h3 class="card-title">La Academia Osborn</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">Formación, Amistades y el Rugido del Trybball</p>
+              <div class="card-text">
+                <p>En los pasillos de la <strong>Academia Militar Osborn</strong>, Marcus conoció a <strong>Carlos Santiago</strong>, hermano mayor de Dominic Santiago. Esta amistad fue quizás la más significativa de su vida y definiría los lazos que lo unirían a Dom para siempre. Marcus destacaba en atletismo, especialmente en <strong>Trybball</strong>, un violento deporte de equipo donde su agresividad encontraba válvula de escape.</p>
+                <p>Aunque sus calificaciones académicas eran inconsistentes, su capacidad de liderazgo natural era evidente para todos los instructores. Ya desde joven mostraba una <strong>lealtad incondicional</strong> hacia quienes consideraba suyos, rasgo que definiría cada decisión de su vida adulta.</p>
+              </div>
+              <div class="card-quote">
+                <p>"No lucho por la COG, ni por Jacinto. Lucho por la persona que tengo a mi lado."</p>
+                <cite>— Marcus Fenix</cite>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /cards-grid -->
+
+        <!-- CARD WIDE: Muerte de Elain -->
+        <div class="cards-grid single">
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — La desaparición de Elain Fenix</span>
+              </div>
+              <div class="card-image-year">~5 A.E.</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Tragedia Familiar</p>
+              <h3 class="card-title">La Pérdida de la Madre — El Silencio que lo Rompió</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">Elain Fenix — Desaparecida en el Archipiélago de Azura</p>
+              <div class="card-text">
+                <p><strong>Elain Fenix</strong>, la madre de Marcus, desapareció misteriosamente cuando él era joven. Durante años Marcus creyó que había muerto. La verdad, descubierta mucho después, era más oscura: Adam Fenix había enviado en secreto a Elain a la isla utópica de <strong>Azura</strong>, un enclave ultrasecreto de la COG, para protegerla cuando ella desarrolló una enfermedad mental severa vinculada a las <strong>Imulsión</strong> —el combustible milagroso que alimentaba la civilización de Sera.</p>
+                <p>Esta ausencia cavó un abismo entre padre e hijo. Adam se volvió aún más distante, enterrado en sus investigaciones. Marcus aprendió muy temprano que la lealtad y el amor tenían que buscarse fuera de la familia biológica, en los hermanos que uno elige en el campo de batalla.</p>
+              </div>
+
+              <!-- Video slot inline -->
+              <div class="video-slot">
+                <div class="video-placeholder">
+                  <div class="play-btn">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                  <span>Espacio para video — Historia de Elain Fenix</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ════════ CAPÍTULO II: LA PENDULUM WARS ════════ -->
+      <div class="ch-divider">
+        <div class="ch-divider-line"></div>
+        <span class="ch-divider-label">Transición cronológica</span>
+        <div class="ch-divider-line"></div>
+      </div>
+
+      <section class="timeline-section">
+        <div class="chapter-title">
+          <div class="chapter-number">II</div>
+          <p class="chapter-label">Capítulo II · Las Guerras del Péndulo</p>
+          <h2 class="chapter-heading">Bautismo de Fuego</h2>
+        </div>
+
+        <div class="cards-grid">
+
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Guerras del Péndulo</span>
+              </div>
+              <div class="card-image-year">Péndulo</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Conflicto Global Pre-Locust</p>
+              <h3 class="card-title">Soldado de la COG — Las Guerras del Péndulo</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">La Primera Sangre y la Hermandad con Dom</p>
+              <div class="card-text">
+                <p>Al alcanzar la mayoría de edad, Marcus se alistó voluntariamente en el ejército de la <strong>COG</strong> durante las Guerras del Péndulo, un prolongado conflicto entre las grandes naciones de Sera por el control de los depósitos de Imulsión. Aquí combatió hombro con hombro junto a <strong>Dom Santiago</strong>, sellando la hermandad de por vida tras la muerte en combate de <strong>Carlos Santiago</strong>, el hermano mayor de Dom.</p>
+                <p>Marcus ascendió rápidamente, ganándose la reputación de soldado casi sobrehumano por su resistencia física y su frialdad bajo el fuego enemigo. Sirvió en múltiples frentes, acumulando condecoraciones pero también cicatrices que jamás mostró al mundo.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Muerte de Carlos Santiago</span>
+              </div>
+              <div class="card-image-year">Batalla</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Sacrificio y Lealtad</p>
+              <h3 class="card-title">La Muerte de Carlos Santiago</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">El Sacrificio que Forjó Dos Vidas</p>
+              <div class="card-text">
+                <p><strong>Carlos Santiago</strong> murió protegiendo a Marcus durante un combate en las Guerras del Péndulo, un sacrificio que Marcus jamás superaría completamente. Este evento cimentó un <strong>vínculo de deuda y amor fraternal</strong> entre Marcus y Dom que ningún campo de batalla podría romper.</p>
+                <p>Dom nunca culpó a Marcus. En cambio, prometió que seguiría donde Carlos había dejado: cuidando de Marcus Fenix como un hermano. Esta promesa definiría el destino de ambos durante las décadas más oscuras de Sera.</p>
+              </div>
+              <div class="card-quote">
+                <p>"Carlos te hubiera dicho lo mismo, Marcus. Tú no tienes la culpa de nada."</p>
+                <cite>— Dominic Santiago</cite>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ════════ CAPÍTULO III: DÍA DE LA EMERGENCIA ════════ -->
+      <div class="ch-divider">
+        <div class="ch-divider-line"></div>
+        <span class="ch-divider-label">Transición cronológica</span>
+        <div class="ch-divider-line"></div>
+      </div>
+
+      <section class="timeline-section">
+        <div class="chapter-title">
+          <div class="chapter-number">III</div>
+          <p class="chapter-label">Capítulo III · Día E y la Guerra contra los Locust</p>
+          <h2 class="chapter-heading">El Día que el Mundo Murió</h2>
+        </div>
+
+        <div class="cards-grid single">
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Día de la Emergencia / E-Day</span>
+              </div>
+              <div class="card-image-year">E-Day</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Año 0 — Día de la Emergencia</p>
+              <h3 class="card-title">E-Day — La Horda Emerge</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">El Fin de la Civilización Humana Tal Como Se Conocía</p>
+              <div class="card-text">
+                <p>El <strong>Día de la Emergencia (E-Day)</strong> llegó sin previo aviso. Millones de criaturas subterráneas —los <strong>Locust Horde</strong>— brotaron simultáneamente desde túneles en todo el planeta Sera, masacrando a la población civil antes de que ningún gobierno pudiera reaccionar. En pocas horas, ciudades enteras fueron destruidas o engullidas por el suelo.</p>
+                <p>Marcus combatió desde el primer momento, pero las líneas de la COG colapzaban por todas partes. La escala de la amenaza superaba cualquier previsión. <strong>En un solo día murió la mayoría de la población humana de Sera.</strong> Lo que siguió fue una guerra de supervivencia sin cuartel durante quince años.</p>
+              </div>
+
+              <!-- Inline image -->
+              <div class="inline-img-slot">
+                <div class="image-placeholder">
+                  <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                    <path d="m21 15-5-5L5 21"/>
+                  </svg>
+                  <span>Imagen — La destrucción de las ciudades durante E-Day</span>
+                </div>
+              </div>
+
+              <div class="card-text">
+                <p>Marcus Fenix emergió como uno de los guerreros más eficaces de la COG durante los primeros años de la Locust War. Pero ningún logro en el campo de batalla podría prepararlo para la decisión que lo definiría para el resto de su vida.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD: Traición -->
+        <div class="cards-grid">
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Marcus abandona su puesto</span>
+              </div>
+              <div class="card-image-year">9 A.E.</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Año 9 de la Emergencia — El Quiebre</p>
+              <h3 class="card-title">La Traición a la COG — La Decisión que lo Condenó</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">El Sitio de Ephyra — Abandonar el Puesto</p>
+              <div class="card-text">
+                <p>Durante el crítico <strong>Sitio de Ephyra</strong>, con la capital humana a punto de caer, Marcus tomó la decisión que destruiría su carrera: abandonó su posición de combate para intentar rescatar a su padre, Adam Fenix, atrapado en la mansión familiar durante el ataque Locust.</p>
+                <p>Adam fue dado por muerto. La posición de Marcus colapsó, y sus compañeros soldados pagaron con sus vidas el abandono. Marcus fue <strong>arrestado, juzgado en consejo de guerra y condenado por traición y abandono del puesto en combate</strong>. La sentencia: 40 años en la Prisión de Máxima Seguridad de Jacinto — el Slab.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — La Prisión The Slab</span>
+              </div>
+              <div class="card-image-year">9-14 A.E.</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Años 9 al 14 de la Emergencia</p>
+              <h3 class="card-title">El Slab — Cuatro Años en el Infierno</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">Prisión de Jacinto — Sobrevivir entre Criminales y Locust</p>
+              <div class="card-text">
+                <p>El <strong>Slab</strong> era una prisión fortaleza dentro del perímetro de granito de Jacinto, considerada inexpugnable. Marcus cumplió cuatro años allí, enfrentando no solo a presos peligrosos sino también a ataques Locust esporádicos que penetraban los muros. Sobrevivió donde otros no podían simplemente mediante la brutalidad adaptativa que la guerra le había enseñado.</p>
+                <p>Durante este período, el resto del mundo continuaba destruyéndose. Dom Santiago —único amigo fiel— visitaba regularmente al recluso, negándose a abandonarlo. Mientras tanto, Adam Fenix, que había sobrevivido en secreto, continuaba su misterioso trabajo para la COG desde Azura, cargando la culpa de haber sacrificado a su hijo.</p>
+              </div>
+              <div class="card-quote">
+                <p>"Sobreviví al Slab del mismo modo que sobreviví a todo lo demás: sin pensar demasiado en el mañana."</p>
+                <cite>— Marcus Fenix</cite>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ════════ CAPÍTULO IV: GEARS OF WAR 1 — LIBERACIÓN ════════ -->
+      <div class="ch-divider">
+        <div class="ch-divider-line"></div>
+        <span class="ch-divider-label">Transición cronológica</span>
+        <div class="ch-divider-line"></div>
+      </div>
+
+      <section class="timeline-section">
+        <div class="chapter-title">
+          <div class="chapter-number">IV</div>
+          <p class="chapter-label">Capítulo IV · Gears of War I</p>
+          <h2 class="chapter-heading">El Regreso a la Guerra</h2>
+        </div>
+
+        <div class="cards-grid">
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Dom libera a Marcus del Slab</span>
+              </div>
+              <div class="card-image-year">14 A.E.</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Año 14 de la Emergencia</p>
+              <h3 class="card-title">Libertad a Punta de Lancer</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">Operación: Extraer a Delta Squad</p>
+              <div class="card-text">
+                <p>Con Jacinto al borde del colapso total, el General <strong>Hoffman</strong> autorizó la liberación de Marcus Fenix bajo una amnistía de emergencia. Dom irrumpió personalmente en el Slab mientras los Locust atacaban la prisión, rescatando a Marcus del fuego cruzado.</p>
+                <p>Marcus retomó las armas sin vacilar. Se reintegró a las fuerzas COG como líder de <strong>Delta Squad</strong>, junto a Dom, <strong>Augustus "Cole Train" Cole</strong> y <strong>Damon Baird</strong>. Su misión inmediata: recuperar el <strong>Resonador de Luz</strong> y desplegarlo en las entrañas del subsuelo para mapear la red de túneles Locust.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Submersión de Timgad / Resonador de Luz</span>
+              </div>
+              <div class="card-image-year">GOW I</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Gears of War I — Eventos Clave</p>
+              <h3 class="card-title">El Resonador, el Submersible y la Lightmass Bomb</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">Delta Squad vs. La Horda Locust Completa</p>
+              <div class="card-text">
+                <p>Delta Squad descendió a las <strong>Hollow</strong> —la vasta red subterránea de los Locust— para desplegar el Resonador. Aunque el mapa obtenido fue incompleto, lograron usar los datos del ordenador de Adam Fenix —recuperados de la mansión Fenix destruida— para guiar la <strong>Bomba Lightmass</strong> a través del subsuelo.</p>
+                <p>Marcus detonó la bomba desde el <strong>Tyro Station</strong>, destruyendo vastas secciones de las Hollow y causando bajas masivas en los Locust. Sin embargo, la Reina Myrrah sobrevivió, y la guerra continuó. El descubrimiento de los datos de Adam Fenix también reveló a Marcus que su padre podría haber sobrevivido, sembrando una esperanza amarga.</p>
+              </div>
+
+              <!-- Video slot -->
+              <div class="video-slot">
+                <div class="video-placeholder">
+                  <div class="play-btn">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                  <span>Espacio para video — Cinemáticas GOW I</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════ CAPÍTULO V: GEARS OF WAR 2 ════════ -->
+      <div class="ch-divider">
+        <div class="ch-divider-line"></div>
+        <span class="ch-divider-label">Transición cronológica</span>
+        <div class="ch-divider-line"></div>
+      </div>
+
+      <section class="timeline-section">
+        <div class="chapter-title">
+          <div class="chapter-number">V</div>
+          <p class="chapter-label">Capítulo V · Gears of War II</p>
+          <h2 class="chapter-heading">Hundir Jacinto o Perderlo Todo</h2>
+        </div>
+
+        <div class="cards-grid">
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — La operación Hollow Storm</span>
+              </div>
+              <div class="card-image-year">15 A.E.</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Año 15 — Hollow Storm</p>
+              <h3 class="card-title">Operación Hollow Storm</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">La COG Lleva la Guerra a las Entrañas de la Tierra</p>
+              <div class="card-text">
+                <p>Un año después, los Locust habían comenzado a usar las raíces de Imulsión para hundir activamente ciudades humanas. La COG respondió con la <strong>Operación Hollow Storm</strong>: la invasión masiva del subsuelo Locust. Delta Squad, liderado por Marcus, penetró profundamente en las Hollow, enfrentando horrores indescriptibles.</p>
+                <p>En las profundidades descubrieron a los <strong>Lambent</strong> —criaturas mutadas por sobreexposición a la Imulsión— en guerra con los propios Locust. Esto revelaba una amenaza aún mayor en el horizonte.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Dom encuentra a Maria</span>
+              </div>
+              <div class="card-image-year">Tragedia</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">El Peso de la Humanidad</p>
+              <h3 class="card-title">Maria — El Sacrificio de Dom</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">La Decisión Más Cruel de la Guerra</p>
+              <div class="card-text">
+                <p>En las profundidades de las Hollow, Dom encontró finalmente a su esposa <strong>Maria Santiago</strong>, por quien había buscado durante años. Pero lo que encontró lo destrozó: Maria estaba irreparablemente dañada física y mentalmente por las torturas Locust. Ya no era quien había sido.</p>
+                <p>Dom tomó la decisión más devastadora de su vida: <strong>disparó a Maria para liberarla del sufrimiento</strong>. Marcus fue testigo silencioso. Este momento quebró algo irreparable en Dom, iniciando su camino hacia el sacrificio final. Marcus cargó el peso de ese momento junto a su hermano, sin palabras pero sin abandonarlo.</p>
+              </div>
+              <div class="card-quote">
+                <p>"Descansa, Maria. Ya terminó."</p>
+                <cite>— Dominic Santiago, su último adiós</cite>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cards-grid single">
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Hundimiento de Jacinto</span>
+              </div>
+              <div class="card-image-year">Fin GOW II</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">El Sacrificio Final de la Ciudad</p>
+              <h3 class="card-title">Hundir Jacinto — La Última Esperanza</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">Si No Pueden Defenderla, Que los Locust Se la Traguen</p>
+              <div class="card-text">
+                <p>Al descubrir que los Locust planeaban hundir Jacinto —la última ciudad humana— bombeando agua de mar en sus cimientos, Marcus y Delta Squad tomaron una decisión audaz: <strong>acelerar el hundimiento ellos mismos</strong>, inundando masivamente las Hollow para ahogar a los Locust dentro.</p>
+                <p>La operación fue devastadoramente exitosa. Jacinto se hundió, inundando el subsuelo y masacrando a millones de Locust. Los supervivientes humanos fueron evacuados en barcos y Ravens. Marcus emergió de las aguas inundadas como el arquitecto de la victoria más costosa de la historia humana. La civilización de Sera estaba destruida, pero los humanos sobrevivían. Apenas.</p>
+              </div>
+
+              <div class="video-slot">
+                <div class="video-placeholder">
+                  <div class="play-btn">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                  <span>Espacio para video — Hundimiento de Jacinto</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════ CAPÍTULO VI: ENTRE GUERRAS ════════ -->
+      <div class="ch-divider">
+        <div class="ch-divider-line"></div>
+        <span class="ch-divider-label">Transición cronológica</span>
+        <div class="ch-divider-line"></div>
+      </div>
+
+      <section class="timeline-section">
+        <div class="chapter-title">
+          <div class="chapter-number">VI</div>
+          <p class="chapter-label">Capítulo VI · Post Jacinto</p>
+          <h2 class="chapter-heading">Sin Ciudad, Sin Hogar</h2>
+        </div>
+
+        <div class="cards-grid">
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Los refugiados post-Jacinto en Vectes</span>
+              </div>
+              <div class="card-image-year">15-17 A.E.</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Años 15-17 — La Era de los Refugiados</p>
+              <h3 class="card-title">Vectes y la Nueva COG</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">Construir Sobre las Ruinas de Todo</p>
+              <div class="card-text">
+                <p>Los supervivientes de Jacinto navegaron hacia <strong>Vectes</strong>, una isla remota con una antigua base naval de la COG, que se convirtió en el nuevo hogar provisional de la humanidad. Marcus continuó sirviendo como soldado mientras la nueva sociedad intentaba reconstruirse desde cero.</p>
+                <p>Pero la amenaza <strong>Lambent</strong> —criaturas mutadas por Imulsión que explotaban violentamente al morir— comenzó a surgir del océano, atacando los asentamientos. Los Locust también continuaban apareciendo en superficie. La paz prometida nunca llegó. Marcus vio cómo la COG institucional colapsaba bajo el peso de demasiadas amenazas y muy pocos recursos.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — La COG se disuelve, los Stranded</span>
+              </div>
+              <div class="card-image-year">Colapso</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Colapso Institucional</p>
+              <h3 class="card-title">La Disolución de la COG</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">El Fin del Último Gobierno y el Nacimiento de los Survivalist</p>
+              <div class="card-text">
+                <p>Ante la imparable amenaza Lambent y la imposibilidad de defender múltiples frentes, la <strong>COG oficial se disolvió</strong>. El Chairman Prescott desapareció misteriosamente. Los sobrevivientes se dispersaron en pequeñas comunidades: los leales continuadores de la COG bajo liderazgo militar informal, los <strong>Stranded</strong> que rechazaban cualquier autoridad, y grupos independientes que buscaban sobrevivir solos.</p>
+                <p>Marcus y Delta Squad continuaron operando como fuerza de combate autónoma desde el <strong>CNV Sovereign</strong>, un portaaviones que se convirtió en la base móvil de los últimos Gears. La pandemia Lambent avanzaba sin control.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════ CAPÍTULO VII: GEARS OF WAR 3 ════════ -->
+      <div class="ch-divider">
+        <div class="ch-divider-line"></div>
+        <span class="ch-divider-label">Transición cronológica</span>
+        <div class="ch-divider-line"></div>
+      </div>
+
+      <section class="timeline-section">
+        <div class="chapter-title">
+          <div class="chapter-number">VII</div>
+          <p class="chapter-label">Capítulo VII · Gears of War III — El Clímax</p>
+          <h2 class="chapter-heading">El Fin de Todo lo Conocido</h2>
+        </div>
+
+        <div class="cards-grid">
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — El CNV Sovereign bajo ataque Lambent</span>
+              </div>
+              <div class="card-image-year">18 A.E.</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Año 18 — El Comienzo del Fin</p>
+              <h3 class="card-title">El Mensaje de Adam Fenix</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">Un Padre Vivo, una Solución y una Traición Revelada</p>
+              <div class="card-text">
+                <p>Todo cambió cuando el Chairman Prescott reapareció inesperadamente en el Sovereign con un mensaje encriptado: <strong>Adam Fenix estaba vivo</strong>, retenido en Azura, y había desarrollado una solución para detener la pandemia Lambent. En ese mismo momento, el portaaviones fue atacado masivamente por Lambent, forzando la evacuación a tierra firme.</p>
+                <p>Marcus recibió la noticia con una mezcla de alivio, furia y confusión. Su padre había sobrevivido en secreto todos estos años mientras él sufría en el Slab y en el campo de batalla. La misión ahora era clara: llegar a Azura, rescatar a Adam y salvar a la humanidad con su solución.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Acto 2, Cole y Baird en Hanover</span>
+              </div>
+              <div class="card-image-year">Acto II</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Reunir Fuerzas — Actos I y II</p>
+              <h3 class="card-title">Alianzas de Supervivencia</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">Rusty Nail, Anvil Gate y los Sobrevivientes</p>
+              <div class="card-text">
+                <p>Marcus lideró la reunificación de fuerzas dispersas. Delta Squad se dividió en equipos: <strong>Cole y Baird</strong> viajaron a Hanover para reclutar sobrevivientes civiles, encontrando la ciudad devastada y el estadio natal de Cole infestado. Marcus y Dom marcharon hacia el <strong>Fuerte Anvil Gate</strong>, donde el Sargento Bernadette Mataki y el Mayor Gill Gettner reforzaron las filas.</p>
+                <p>La revelación de que Prescott había ocultado la existencia de Azura —y con ella la de Adam Fenix— provocó una crisis de confianza. Marcus contuvo su rabia, concentrado en la misión. Necesitaban un submarino para acceder a la isla, y para eso necesitarían pasar por el corazón del territorio Locust controlado por la Reina Myrrah.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD: Dom muere -->
+        <div class="cards-grid single">
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Dom sacrificándose en los campos de Mercy</span>
+              </div>
+              <div class="card-image-year">Acto III</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">El Momento Más Devastador — Acto III</p>
+              <h3 class="card-title">El Sacrificio de Dom Santiago</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">Mercy, 18 A.E. — La Deuda Que Nunca Podrá Pagarse</p>
+              <div class="card-text">
+                <p>En los campos de combustible de <strong>Mercy</strong>, rodeados por un número aplastante de Lambent y Locust que amenazaba con aniquilar a todo Delta Squad, Dominic Santiago tomó su última decisión. Estrelló un camión cisterna cargado de combustible contra las instalaciones eneminas, provocando una explosión masiva que eliminó a todos los enemigos en el área pero que también lo consumió a él.</p>
+                <p><strong>Dominic Santiago murió.</strong> El hombre que había rescatado a Marcus del Slab. El hermano que nunca lo abandonó. El amigo más leal que el mundo de Sera había conocido. Marcus presenció la explosión en silencio, el rostro pétreo mientras por dentro se derrumbaba algo que nunca volvería a reconstruirse por completo.</p>
+              </div>
+
+              <!-- Inline image slot -->
+              <div class="inline-img-slot">
+                <div class="image-placeholder">
+                  <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                    <path d="m21 15-5-5L5 21"/>
+                  </svg>
+                  <span>Imagen — Marcus de luto por Dom</span>
+                </div>
+              </div>
+
+              <div class="card-text">
+                <p>La muerte de Dom es considerada uno de los momentos más emocionalmente devastadores de la saga. Marcus, que rara vez mostraba vulnerabilidad, cargó ese duelo en silencio hasta el final de la guerra. Cole y Baird observaron al líder de Delta Squad mirar los restos ardientes, y nadie pronunció una sola palabra. Algunas pérdidas van más allá de las palabras.</p>
+              </div>
+
+              <div class="card-quote">
+                <p>"Todo lo que hice, lo hice por ti, hermano. Y lo volvería a hacer."</p>
+                <cite>— Dominic Santiago, su legado</cite>
+              </div>
+
+              <!-- Video slot -->
+              <div class="video-slot">
+                <div class="video-placeholder">
+                  <div class="play-btn">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                  <span>Espacio para video — La muerte de Dom Santiago</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD: Azura y Adam -->
+        <div class="cards-grid">
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Isla de Azura</span>
+              </div>
+              <div class="card-image-year">Azura</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Acto IV — La Isla Utópica Secreta</p>
+              <h3 class="card-title">Azura — El Paraíso Escondido</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">El Último Secreto de la COG</p>
+              <div class="card-text">
+                <p>A bordo del submarino <strong>CNV Adamantine</strong>, Delta Squad llegó a Azura atravesando el campo de interferencia que la mantenía oculta del mundo exterior. La isla era extraordinaria: un resort de investigación de élite construido por la COG para preservar las mentes más brillantes de Sera en caso de catástrofe.</p>
+                <p>Allí encontraron también a la <strong>Reina Myrrah</strong>, que había tomado control de la isla con sus fuerzas Locust sobrevivientes. Y en las instalaciones de investigación, bajo custodia Locust: <strong>Adam Fenix</strong>, viejo y enfermo, pero vivo y lúcido, trabajando contra el tiempo en su solución para la plaga Lambent.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Marcus y Adam Fenix reunidos</span>
+              </div>
+              <div class="card-image-year">Reencuentro</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">Padre e Hijo — La Verdad</p>
+              <h3 class="card-title">Cara a Cara con Adam Fenix</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">La Confesión y la Solución</p>
+              <div class="card-text">
+                <p>El reencuentro entre Marcus y Adam fue tenso y cargado de décadas de silencio, culpa y abandono. Adam confesó todo: había <strong>creado</strong> la energía Imulsión que alimentó a los Locust. Había guardado silencio para proteger a su familia. Había dejado que Marcus fuera a prisión en lugar de revelar sus secretos.</p>
+                <p>Pero también había pasado todos esos años trabajando en <strong>un dispositivo capaz de purgar la Imulsión de todos los seres vivos en Sera</strong>: mataría a los Lambent, pero también mataría a cualquier ser contaminado por Imulsión, incluyendo a los propios Locust... y potencialmente a Adam mismo, saturado de Imulsión tras años de experimentación.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD FINAL: La muerte de Adam y el fin de la guerra -->
+        <div class="cards-grid single">
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Adam activa el dispositivo, ola de energía naranja</span>
+              </div>
+              <div class="card-image-year">FIN</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">El Clímax Final — La Redención</p>
+              <h3 class="card-title">Adam Fenix Activa el Dispositivo — El Fin de la Guerra</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">La Reina Myrrah, La Muerte de Adam y La Victoria Más Amarga</p>
+              <div class="card-text">
+                <p>Mientras Delta Squad combatía a los Locust en la cima de la torre de Azura, <strong>Adam Fenix activó el dispositivo de purga de Imulsión</strong>. Una ola de energía se propagó por toda Sera, incinerando a todos los Lambent y a los Locust, extinguiendo la plaga y acabando con la horda de una vez por todas.</p>
+                <p>Adam Fenix murió en el proceso, consumido por la energía de Imulsión acumulada en su propio cuerpo. Sus últimas palabras fueron de amor hacia su hijo, la disculpa que llegó demasiado tarde y demasiado bien. Marcus sostuvo a su padre mientras moría frente a él, tras décadas de distancia, en el único momento de verdadera conexión que les había permitido la guerra.</p>
+              </div>
+
+              <!-- Inline image -->
+              <div class="inline-img-slot">
+                <div class="image-placeholder">
+                  <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                    <path d="m21 15-5-5L5 21"/>
+                  </svg>
+                  <span>Imagen — Marcus sostiene a Adam Fenix</span>
+                </div>
+              </div>
+
+              <div class="card-text">
+                <p>La <strong>Reina Myrrah</strong>, única Locust sobreviviente por ser de origen humano, fue cazada y ejecutada por Marcus con el cuchillo de Dom Santiago —el último homenaje al hermano caído—. Con esa muerte, la guerra de quince años finalmente terminó.</p>
+                <p>Marcus Fenix quedó de pie sobre las ruinas del mundo. Había salvado a la humanidad. Había perdido a su padre, a su mejor amigo, a casi todos los que amó. La victoria tenía el sabor de las cenizas.</p>
+              </div>
+
+              <div class="card-quote">
+                <p>"Lo siento, Marcus. Lo siento todo."</p>
+                <cite>— Adam Fenix, sus últimas palabras a su hijo</cite>
+              </div>
+
+              <!-- Video slot -->
+              <div class="video-slot">
+                <div class="video-placeholder">
+                  <div class="play-btn">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                  <span>Espacio para video — Cinemática Final GOW 3</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════ CAPÍTULO VIII: EL LEGADO ════════ -->
+      <div class="ch-divider">
+        <div class="ch-divider-line"></div>
+        <span class="ch-divider-label">Epílogo</span>
+        <div class="ch-divider-line"></div>
+      </div>
+
+      <section class="timeline-section">
+        <div class="chapter-title">
+          <div class="chapter-number">VIII</div>
+          <p class="chapter-label">Epílogo — El Legado</p>
+          <h2 class="chapter-heading">Lo Que Queda Después de la Guerra</h2>
+        </div>
+
+        <div class="cards-grid">
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — Marcus en la granja post-guerra (GOW 4)</span>
+              </div>
+              <div class="card-image-year">Post-18</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">El Hombre Más Allá del Soldado</p>
+              <h3 class="card-title">Marcus Después de la Guerra</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">La Vida Que Nunca Imaginó Tener</p>
+              <div class="card-text">
+                <p>Tras el fin de la guerra, Marcus Fenix se retiró al interior de un Sera que lentamente intentaba recuperarse. Se estableció en la <strong>granja familiar Fenix</strong>, lejos de la política y las armas. La humanidad comenzó el largo proceso de reconstrucción en un planeta donde la Imulsión había desaparecido, forzando el desarrollo de nuevas fuentes de energía.</p>
+                <p>Marcus nunca habló mucho de lo que vivió. Cargó sus pérdidas con la misma impasividad que había mostrado siempre en el campo de batalla. Pero en la quietud de su granja, lejos del ruido de las guerras, quizás encontró algo parecido a la paz que nunca buscó conscientemente pero que siempre mereció.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="gow-card">
+            <div class="card-image-slot">
+              <div class="image-placeholder">
+                <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="m21 15-5-5L5 21"/>
+                </svg>
+                <span>Imagen — JD Fenix — el hijo de Marcus</span>
+              </div>
+              <div class="card-image-year">GOW 4</div>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">La Nueva Generación</p>
+              <h3 class="card-title">JD Fenix — La Siguiente Llama</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">El Padre que Aprendió de sus Errores</p>
+              <div class="card-text">
+                <p>Marcus tuvo un hijo, <strong>James Dominic "JD" Fenix</strong>, cuyo segundo nombre era un tributo eterno a Dom Santiago. La relación entre padre e hijo estuvo marcada por la misma frialdad que Marcus había experimentado con Adam, en un doloroso ciclo que Marcus intentó romper con resultados mixtos.</p>
+                <p>Cuando una nueva amenaza surgió en Gears of War 4, Marcus salió de su retiro para ayudar a su hijo, cerrando el ciclo entre generaciones. El soldado que nunca quiso ser héroe se convirtió en el padre imperfecto pero presente que su propio padre nunca pudo ser. El legado de Marcus Fenix no era de victorias militares, sino de amor disfuncional y supervivencia compartida.</p>
+              </div>
+              <div class="card-stats">
+                <span class="stat-chip">JD Fenix</span>
+                <span class="stat-chip">Legado</span>
+                <span class="stat-chip">Gears of War 4</span>
+                <span class="stat-chip">Nueva Era</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card resumen final -->
+        <div class="cards-grid single">
+          <div class="gow-card">
+            <div class="card-body" style="padding-top: 36px; padding-bottom: 36px;">
+              <p class="card-tag">El Veredicto de la Historia</p>
+              <h3 class="card-title">¿Quién Es Marcus Fenix?</h3>
+              <div class="card-sep">
+                <div class="card-sep-line"></div>
+                <div class="card-sep-diamond"></div>
+                <div class="card-sep-line-r"></div>
+              </div>
+              <p class="card-subtitle">El Hombre Detrás de la Armadura</p>
+              <div class="card-text">
+                <p>Marcus Fenix no es un héroe clásico. Es un hombre <strong>forjado en la ausencia y templado en la pérdida</strong>. Creció sin una madre. Fue abandonado emocionalmente por un padre brillante pero ausente. Perdió a su mejor amigo. Pasó años en prisión por el crimen de amar a alguien. Y aun así, cada vez que el mundo necesitó a alguien que no se rindiera, Marcus Fenix estuvo allí.</p>
+                <p>Su fortaleza no viene de la ideología ni del patriotismo. Viene de una lealtad visceral, casi animal, hacia los pocos que llama suyos. <strong>Dom. Cole. Baird. Anya.</strong> Por ellos lucha. Por ellos mata. Por ellos sobrevive cuando todo lo demás ha muerto.</p>
+                <p>La saga de Gears of War es, en su esencia, la historia de un hombre que nunca pidió ser el salvador del mundo, pero que nunca fue capaz de mirar hacia otro lado cuando alguien que amaba necesitaba ayuda. Y esa incapacidad para abandonar a los suyos, esa <strong>terquedad de amor</strong> disfrazada de dureza, es lo que hace de Marcus Fenix uno de los personajes más humanos de la historia de los videojuegos.</p>
+              </div>
+              <div class="card-quote">
+                <p>"Sobrevivir no es lo mismo que vivir. Pero a veces es todo lo que tienes."</p>
+                <cite>— Marcus Fenix</cite>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════ FOOTER ════════ -->
+      <footer class="gow-footer">
+        <div class="footer-cog">GEARS OF WAR III</div>
+        <div class="footer-line"></div>
+        <p class="footer-text">Coalition of Ordered Governments · Archivo Histórico Clasificado · Sera</p>
+        <p class="footer-text" style="margin-top:8px; opacity:0.4;">Marcus Michael Fenix · Sargento Mayor · Delta Squad · 26ª Compañía</p>
+      </footer>
+
+    </div><!-- /page-scroll -->
+  </ion-content>
+</ion-app>
+
+</body>
+</html>
